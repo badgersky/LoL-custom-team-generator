@@ -6,3 +6,5 @@ venv
 test.py
 generate_teams.exe
 generate_teams.zip
+players.txt
+

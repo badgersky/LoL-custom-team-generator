@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from generator import TeamGenerator
+from tkinter import messagebox
 
 
 class App(ctk.CTk):
@@ -33,5 +34,15 @@ class App(ctk.CTk):
         self.ent_new_players = ctk.CTkEntry(self.new_players)
         self.ent_new_players.grid(row=0, column=1, padx=5, pady=5, sticky='ew')
 
-        self.btn_new_players = ctk.CTkButton(self.new_players, width=40, text='Add')
+        self.btn_new_players = ctk.CTkButton(self.new_players, width=40, text='Add', command=self.add_player)
         self.btn_new_players.grid(row=0, column=2, padx=5, pady=5)
+
+    def add_player(self):
+        new_players = self.ent_new_players.get().split()
+
+        with open('players.txt', 'a') as file:
+            for player in new_players:
+                file.write(player + '\n')
+
+        self.ent_new_players.delete('0', 'end')
+        messagebox.showinfo('Succes', 'Players succesfully saved!')
