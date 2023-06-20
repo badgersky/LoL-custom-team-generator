@@ -1,10 +1,10 @@
 import random
 
 
-class team_generator:
+class TeamGenerator:
 
-    def __init__(self, *args):
-        self._players = [player.lower().strip() for player in ' '.join(args).split()]
+    def __init__(self, players):
+        self._players = players
 
     def __str__(self):
         """print all players"""
