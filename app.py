@@ -29,7 +29,7 @@ class App(ctk.CTk):
         # self.players_manager.columnconfigure(1, weight=2)
 
         # players manager label
-        self.lbl_players_manager = ctk.CTkLabel(self.players_manager, text='Players Manager')
+        self.lbl_players_manager = ctk.CTkLabel(self.players_manager, text='PLAYERS MANAGER')
         self.lbl_players_manager.grid(row=0, column=0, padx=10, pady=5, sticky='w')
 
         # adding new players
@@ -46,7 +46,8 @@ class App(ctk.CTk):
         self.lbl_remove_players = ctk.CTkLabel(self.players_manager, text='Chose players to remove:')
         self.lbl_remove_players.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
-        self.create_remove_players_combobox()
+        self.remove_players_combobox = self.create_choose_players_combobox()
+        self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
         self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove', command=self.remove_players)
         self.btn_remove_players.grid(row=2, column=2, padx=10, pady=5, sticky='w')
@@ -57,13 +58,13 @@ class App(ctk.CTk):
         with open('players.txt', 'a+') as file:
             players = self.load_players()
             for player in new_players:
-                if player not in players:
-                    file.write(player + '\n')
+                if player.lower() not in players:
+                    file.write(player.lower() + '\n')
                 else:
-                    messagebox.showinfo('Already Saved', f'Player: {player} already saved.')
+                    messagebox.showinfo('Already Saved', f'Player: {player.lower()} already saved.')
 
-        self.chose_players.destroy()
-        self.create_remove_players_combobox()
+        self.choose_players.destroy()
+        self.create_choose_players_combobox()
         self.ent_players.delete('0', 'end')
 
     def load_players(self):
@@ -74,13 +75,13 @@ class App(ctk.CTk):
             return []
         return [player[:-1] for player in players]
     
-    def create_remove_players_combobox(self):
+    def create_choose_players_combobox(self):
         if players := self.load_players():
-            self.chose_players = ctk.CTkComboBox(self.players_manager, values=players, command=self.insert_players)
+            self.choose_players = ctk.CTkComboBox(self.players_manager, values=players, command=self.insert_players)
         else:
-            self.chose_players = ctk.CTkComboBox(self.players_manager, values=['no players'], state='readonly')
-            self.chose_players.set('no players')
-        self.chose_players.grid(row=2, column=1, padx=5, pady=5, sticky='w')
+            self.choose_players = ctk.CTkComboBox(self.players_manager, values=['no players'], state='readonly')
+            self.choose_players.set('no players')
+        return self.choose_players
     
     def insert_players(self, player):
         self.ent_players.insert('end', player + ' ')
@@ -95,9 +96,9 @@ class App(ctk.CTk):
 
         with open('players.txt', 'w') as file:
             for player in players:
-                file.write(player + '\n')
+                file.write(player.lower() + '\n')
 
-        self.chose_players.destroy()
-        self.create_remove_players_combobox()
+        self.choose_players.destroy()
+        self.create_choose_players_combobox()
         self.ent_players.delete('0', 'end')
         
