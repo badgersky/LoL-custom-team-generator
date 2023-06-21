@@ -9,7 +9,7 @@ class App(ctk.CTk):
         super().__init__()
 
         # window properties
-        self.geometry('650x300')
+        self.geometry('650x350')
         self.title('TeamGenerator')
 
         # grid configuration
@@ -24,28 +24,32 @@ class App(ctk.CTk):
         self.players_manager.grid(row=0, column=0, pady=10, padx=10, sticky='nsew')
         self.generator.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
 
-        self.players_manager.rowconfigure((0, 1), weight=1)
+        self.players_manager.rowconfigure((0, 1, 2), weight=1)
         self.players_manager.columnconfigure((0, 1, 2), weight=1)
         # self.players_manager.columnconfigure(1, weight=2)
 
+        # players manager label
+        self.lbl_players_manager = ctk.CTkLabel(self.players_manager, text='Players Manager')
+        self.lbl_players_manager.grid(row=0, column=0, padx=10, pady=5, sticky='w')
+
         # adding new players
         self.lbl_new_players = ctk.CTkLabel(self.players_manager, text='Add new players:')
-        self.lbl_new_players.grid(row=0, column=0, padx=10, pady=5, sticky='w')
+        self.lbl_new_players.grid(row=1, column=0, padx=10, pady=5, sticky='w')
 
         self.ent_players = ctk.CTkEntry(self.players_manager, width=350)
-        self.ent_players.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+        self.ent_players.grid(row=1, column=1, padx=5, pady=5, sticky='w')
 
         self.btn_new_players = ctk.CTkButton(self.players_manager, width=40, text='Add', command=self.add_player)
-        self.btn_new_players.grid(row=0, column=2, padx=10, pady=5, sticky='w')
+        self.btn_new_players.grid(row=1, column=2, padx=10, pady=5, sticky='w')
 
         # removing players
         self.lbl_remove_players = ctk.CTkLabel(self.players_manager, text='Chose players to remove:')
-        self.lbl_remove_players.grid(row=1, column=0, padx=10, pady=5, sticky='w')
+        self.lbl_remove_players.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
         self.create_remove_players_combobox()
 
         self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove', command=self.remove_players)
-        self.btn_remove_players.grid(row=1, column=2, padx=10, pady=5, sticky='w')
+        self.btn_remove_players.grid(row=2, column=2, padx=10, pady=5, sticky='w')
 
     def add_player(self):
         new_players = self.ent_players.get().split()
@@ -76,7 +80,7 @@ class App(ctk.CTk):
         else:
             self.chose_players = ctk.CTkComboBox(self.players_manager, values=['no players'], state='readonly')
             self.chose_players.set('no players')
-        self.chose_players.grid(row=1, column=1, padx=5, pady=5, sticky='w')
+        self.chose_players.grid(row=2, column=1, padx=5, pady=5, sticky='w')
     
     def insert_players(self, player):
         self.ent_players.insert('end', player + ' ')
