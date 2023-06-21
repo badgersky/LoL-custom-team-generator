@@ -101,6 +101,10 @@ class App(ctk.CTk):
         chosen_players = self.ent_players.get()
         if player not in chosen_players:
             self.ent_players.insert('end', player + ' ')
+        else:
+            chosen_players = chosen_players.replace(player + ' ', '')
+            self.ent_players.delete('0', 'end')
+            self.ent_players.insert('end', chosen_players)
 
     def remove_players(self):
         players_in_generator = self.txt_choose_players.get('0.0', 'end').split()
@@ -124,7 +128,7 @@ class App(ctk.CTk):
 
     def update_comboboxes(self):
         self.remove_players_combobox.destroy()
-        self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, command=self.insert_players_to_remove)
+        self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, self.insert_players_to_remove)
         self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
         self.choose_players_combobox.destroy()
@@ -132,6 +136,10 @@ class App(ctk.CTk):
         self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
     def insert_players_to_generator(self, player):
-        chosen_players = self.txt_choose_players.get('0.0', 'end')
+        chosen_players = self.txt_choose_players.get('0.0', 'end').split()
         if player not in chosen_players:
             self.txt_choose_players.insert('end', player + ' ')
+        else:
+            chosen_players.remove(player)
+            self.txt_choose_players.delete('0.0', 'end')
+            self.txt_choose_players.insert('end', ' '.join(chosen_players) + ' ')
