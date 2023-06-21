@@ -7,14 +7,14 @@
 - removing players
 - generating teams with players you have saved, or with players entered in textbox
 
-![image](https://github.com/badgersky/LoL-custom-team-generator/assets/111532012/18ec19d3-f42e-4ce6-bb5c-fa6954aa1f8e)
+![image](https://github.com/badgersky/LoL-custom-team-generator/assets/111532012/05216a07-7214-4070-ade4-11cfdc5b02d6)
 
 ## How to run generator:
 - download repository
 - install requirements
 - run main.py
 
-## Instruction
+# Instruction
 ## PLAYERS MANAGER
 Here you have one entry box, one select box and two buttons. When you enter you friends` nicknames into entry box and press add, they will be saved to a file player.txt.
 Their nicknames will also appear in select box as valid options. When you click on their nickanems in select box they will be inserted into entry box. If you click button Remove,
