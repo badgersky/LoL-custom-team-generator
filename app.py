@@ -32,8 +32,8 @@ class App(ctk.CTk):
         self.lbl_new_players = ctk.CTkLabel(self.players_manager, text='Add new players:')
         self.lbl_new_players.grid(row=0, column=0, padx=10, pady=5, sticky='w')
 
-        self.ent_new_players = ctk.CTkEntry(self.players_manager, width=350)
-        self.ent_new_players.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+        self.ent_players = ctk.CTkEntry(self.players_manager, width=350)
+        self.ent_players.grid(row=0, column=1, padx=5, pady=5, sticky='w')
 
         self.btn_new_players = ctk.CTkButton(self.players_manager, width=40, text='Add', command=self.add_player)
         self.btn_new_players.grid(row=0, column=2, padx=10, pady=5, sticky='w')
@@ -48,7 +48,7 @@ class App(ctk.CTk):
         self.btn_remove_players.grid(row=1, column=2, padx=10, pady=5, sticky='w')
 
     def add_player(self):
-        new_players = self.ent_new_players.get().split()
+        new_players = self.ent_players.get().split()
 
         with open('players.txt', 'a+') as file:
             players = self.load_players()
@@ -60,7 +60,7 @@ class App(ctk.CTk):
 
         self.chose_players.destroy()
         self.create_remove_players_combobox()
-        self.ent_new_players.delete('0', 'end')
+        self.ent_players.delete('0', 'end')
 
     def load_players(self):
         try:
@@ -79,4 +79,17 @@ class App(ctk.CTk):
         self.chose_players.grid(row=1, column=1, padx=5, pady=5, sticky='w')
     
     def insert_players(self, player):
-        self.ent_new_players.insert('end', player + ' ')
+        self.ent_players.insert('end', player + ' ')
+
+    def remove_players(self):
+        players = self.load_players()
+        players_to_remove = self.ent_players.get().split()
+
+        for player in players_to_remove:
+            if player in players:
+                players.remove(player)
+
+        with open('players.txt', 'w') as file:
+            for player in players:
+                file.write(player + '\n')
+        
