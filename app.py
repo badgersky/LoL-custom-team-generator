@@ -9,7 +9,7 @@ class App(ctk.CTk):
         super().__init__()
 
         # window properties
-        self.geometry('650x420')
+        self.geometry('700x450')
         self.title('TeamGenerator')
 
         # grid configuration
@@ -26,7 +26,7 @@ class App(ctk.CTk):
         self.players_manager.rowconfigure((0, 1, 2), weight=1)
         self.players_manager.columnconfigure((0, 1, 2), weight=1)
         
-        self.generator.rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.generator.rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
         self.generator.columnconfigure(0, weight=1)
         self.generator.columnconfigure(1, weight=2)
 
@@ -38,14 +38,14 @@ class App(ctk.CTk):
         self.lbl_new_players = ctk.CTkLabel(self.players_manager, text='Add new players:')
         self.lbl_new_players.grid(row=1, column=0, padx=10, pady=5, sticky='w')
 
-        self.ent_players = ctk.CTkEntry(self.players_manager, width=350)
+        self.ent_players = ctk.CTkEntry(self.players_manager, width=350, placeholder_text='Enter space separated nicknames')
         self.ent_players.grid(row=1, column=1, padx=5, pady=5, sticky='w')
 
         self.btn_new_players = ctk.CTkButton(self.players_manager, width=40, text='Add', command=self.add_player)
         self.btn_new_players.grid(row=1, column=2, padx=10, pady=5, sticky='w')
 
         # removing players
-        self.lbl_remove_players = ctk.CTkLabel(self.players_manager, text='Chose players to remove:')
+        self.lbl_remove_players = ctk.CTkLabel(self.players_manager, text='Choose players to remove:')
         self.lbl_remove_players.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
         self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, self.insert_players_to_remove)
@@ -56,33 +56,36 @@ class App(ctk.CTk):
 
         # team generator label
         self.lbl_generate_teams = ctk.CTkLabel(self.generator, text='TEAM GENERATOR')
-        self.lbl_generate_teams.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+        self.lbl_generate_teams.grid(row=0, column=0, padx=10, pady=5, sticky='w')
 
         # choose players to make teams out of
+        self.lbl_choose_players = ctk.CTkLabel(self.generator, text='Choose players for your teams:')
+        self.lbl_choose_players.grid(row=1, column=0, padx=10, pady=5, sticky='w')
+
         self.choose_players_combobox = self.create_choose_players_combobox(self.generator, command=self.insert_players_to_generator)
-        self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+        self.choose_players_combobox.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
         self.txt_choose_players = ctk.CTkTextbox(self.generator, height=50, width=350)
-        self.txt_choose_players.grid(row=1, column=1, padx=10, pady=10, sticky='ew')
+        self.txt_choose_players.grid(row=2, column=1, padx=10, pady=5, sticky='ew')
 
         # generate teams
         self.btn_generate_teams = ctk.CTkButton(self.generator, width=60, text='Generate', command=self.generate_teams)
-        self.btn_generate_teams.grid(row=2, column=0, padx=10, pady=10, sticky='w')
+        self.btn_generate_teams.grid(row=3, column=0, padx=10, pady=5, sticky='w')
 
         # clear button
         self.btn_clear_generator = ctk.CTkButton(self.generator, width=60, text='Clear', command=self.clear_generator)
-        self.btn_clear_generator.grid(row=2, column=1,padx=10, pady=10, sticky='w')
+        self.btn_clear_generator.grid(row=3, column=1,padx=10, pady=5, sticky='w')
 
         # left and right generated team labels and textboxes
         self.lbl_left_team = ctk.CTkLabel(self.generator, text='Left team:')
         self.lbl_right_team = ctk.CTkLabel(self.generator, text='Right team:')
-        self.lbl_left_team.grid(row=3, column=0, padx=10, pady=10, sticky='w')
-        self.lbl_right_team.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+        self.lbl_left_team.grid(row=4, column=0, padx=10, pady=5, sticky='w')
+        self.lbl_right_team.grid(row=5, column=0, padx=10, pady=5, sticky='w')
 
         self.ent_left_team = ctk.CTkEntry(self.generator)
         self.ent_right_team = ctk.CTkEntry(self.generator)
-        self.ent_left_team.grid(row=3, column=1, padx=10, pady=10, sticky='ew')
-        self.ent_right_team.grid(row=4, column=1, padx=10, pady=10, sticky='ew')
+        self.ent_left_team.grid(row=4, column=1, padx=10, pady=5, sticky='ew')
+        self.ent_right_team.grid(row=5, column=1, padx=10, pady=5, sticky='ew')
 
 
     def add_player(self):
@@ -147,11 +150,11 @@ class App(ctk.CTk):
     def update_comboboxes(self):
         self.remove_players_combobox.destroy()
         self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, self.insert_players_to_remove)
-        self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
+        self.remove_players_combobox.grid(row=2, column=1, padx=10, pady=5, sticky='w')
 
         self.choose_players_combobox.destroy()
         self.choose_players_combobox = self.create_choose_players_combobox(self.generator, self.insert_players_to_generator)
-        self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+        self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=5, sticky='w')
 
     def insert_players_to_generator(self, player):
         chosen_players = self.txt_choose_players.get('0.0', 'end').split()
@@ -178,4 +181,7 @@ class App(ctk.CTk):
         self.txt_choose_players.delete('0.0', 'end')
         self.ent_right_team.delete('0', 'end')
         self.ent_left_team.delete('0', 'end')
-        
+
+
+if __name__ == '__main__':
+    pass
