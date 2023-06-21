@@ -9,12 +9,11 @@ class App(ctk.CTk):
         super().__init__()
 
         # window properties
-        self.geometry('650x350')
+        self.geometry('650x420')
         self.title('TeamGenerator')
 
         # grid configuration
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(0, weight=2)
+        self.rowconfigure((0, 1), weight=1)
         self.columnconfigure(0, weight=1)   
 
         # frames
@@ -52,7 +51,7 @@ class App(ctk.CTk):
         self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, self.insert_players_to_remove)
         self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
-        self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove', command=self.remove_players)
+        self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='Remove', command=self.remove_players)
         self.btn_remove_players.grid(row=2, column=2, padx=10, pady=5, sticky='w')
 
         # team generator label
@@ -70,12 +69,24 @@ class App(ctk.CTk):
         self.btn_generate_teams = ctk.CTkButton(self.generator, width=60, text='Generate', command=self.generate_teams)
         self.btn_generate_teams.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
+        # left and right generated team labels and textboxes
+        self.lbl_left_team = ctk.CTkLabel(self.generator, text='Left team:')
+        self.lbl_right_team = ctk.CTkLabel(self.generator, text='Right team:')
+        self.lbl_left_team.grid(row=3, column=0, padx=10, pady=10, sticky='w')
+        self.lbl_right_team.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+
+        self.ent_left_team = ctk.CTkEntry(self.generator)
+        self.ent_right_team = ctk.CTkEntry(self.generator)
+        self.ent_left_team.grid(row=3, column=1, padx=10, pady=10, sticky='ew')
+        self.ent_right_team.grid(row=4, column=1, padx=10, pady=10, sticky='ew')
+
+
     def add_player(self):
-        new_players = self.ent_players.get().split()
+        new_players = list(set(player.lower() for player in self.ent_players.get().split()))
 
         with open('players.txt', 'a+') as file:
             players = self.load_players()
-            for player in new_players:
+            for player in sorted(new_players):
                 if player.lower() not in players:
                     file.write(player.lower() + '\n')
                 else:
@@ -153,5 +164,8 @@ class App(ctk.CTk):
         generator = TeamGenerator(players)
         teams = generator.generate_teams()
 
-        print(teams['left'])
-        print(teams['right'])
+        self.ent_right_team.delete('0', 'end')
+        self.ent_left_team.delete('0', 'end')
+
+        self.ent_left_team.insert('end', ' '.join(teams['left']))
+        self.ent_right_team.insert('end', ' '.join(teams['right']))
