@@ -60,12 +60,15 @@ class App(ctk.CTk):
         self.lbl_generate_teams.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 
         # choose players to make teams out of
-        self.choose_players_combobox = self.create_choose_players_combobox(self.generator, self.insert_players_to_generator)
+        self.choose_players_combobox = self.create_choose_players_combobox(self.generator, command=self.insert_players_to_generator)
         self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
         self.txt_choose_players = ctk.CTkTextbox(self.generator, height=50, width=350)
         self.txt_choose_players.grid(row=1, column=1, padx=10, pady=10, sticky='ew')
 
+        # generate teams
+        self.btn_generate_teams = ctk.CTkButton(self.generator, width=60, text='Generate', command=self.generate_teams)
+        self.btn_generate_teams.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
     def add_player(self):
         new_players = self.ent_players.get().split()
@@ -143,3 +146,12 @@ class App(ctk.CTk):
             chosen_players.remove(player)
             self.txt_choose_players.delete('0.0', 'end')
             self.txt_choose_players.insert('end', ' '.join(chosen_players) + ' ')
+
+    def generate_teams(self):
+        players = self.txt_choose_players.get('0.0', 'end').split()
+        
+        generator = TeamGenerator(players)
+        teams = generator.generate_teams()
+
+        print(teams['left'])
+        print(teams['right'])
