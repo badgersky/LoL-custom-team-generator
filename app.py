@@ -103,12 +103,15 @@ class App(ctk.CTk):
             self.ent_players.insert('end', player + ' ')
 
     def remove_players(self):
+        players_in_generator = self.txt_choose_players.get('0.0', 'end').split()
         players = self.load_players()
         players_to_remove = self.ent_players.get().split()
 
         for player in players_to_remove:
             if player in players:
                 players.remove(player)
+            if player in players_in_generator:
+                players_in_generator.remove(player)
 
         with open('players.txt', 'w') as file:
             for player in players:
@@ -117,6 +120,7 @@ class App(ctk.CTk):
         self.update_comboboxes()
         self.ent_players.delete('0', 'end')
         self.txt_choose_players.delete('0.0', 'end')
+        self.txt_choose_players.insert('0.0', ' '.join(players_in_generator))
 
     def update_comboboxes(self):
         self.remove_players_combobox.destroy()
