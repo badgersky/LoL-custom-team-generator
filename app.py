@@ -65,11 +65,15 @@ class App(ctk.CTk):
                 players = file.readlines()
                 print(players)
         except FileNotFoundError:
-            return ['no players']
+            return []
         return players
     
     def create_remove_players_combobox(self):
-        self.chose_players = ctk.CTkComboBox(self.players_manager, values=self.load_players(), command=self.insert_players)
+        if players := self.load_players():
+            self.chose_players = ctk.CTkComboBox(self.players_manager, values=players, command=self.insert_players)
+        else:
+            self.chose_players = ctk.CTkComboBox(self.players_manager, values=['no players'], state='readonly')
+            self.chose_players.set('no players')
         self.chose_players.grid(row=1, column=1, padx=5, pady=5, sticky='w')
     
     def insert_players(self, player):
