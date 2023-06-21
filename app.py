@@ -44,7 +44,7 @@ class App(ctk.CTk):
 
         self.create_remove_players_combobox()
 
-        self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove')
+        self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove', command=self.remove_players)
         self.btn_remove_players.grid(row=1, column=2, padx=10, pady=5, sticky='w')
 
     def add_player(self):
@@ -92,4 +92,8 @@ class App(ctk.CTk):
         with open('players.txt', 'w') as file:
             for player in players:
                 file.write(player + '\n')
+
+        self.chose_players.destroy()
+        self.create_remove_players_combobox()
+        self.ent_players.delete('0', 'end')
         
