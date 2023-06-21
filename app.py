@@ -69,6 +69,10 @@ class App(ctk.CTk):
         self.btn_generate_teams = ctk.CTkButton(self.generator, width=60, text='Generate', command=self.generate_teams)
         self.btn_generate_teams.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
+        # clear button
+        self.btn_clear_generator = ctk.CTkButton(self.generator, width=60, text='Clear', command=self.clear_generator)
+        self.btn_clear_generator.grid(row=2, column=1,padx=10, pady=10, sticky='w')
+
         # left and right generated team labels and textboxes
         self.lbl_left_team = ctk.CTkLabel(self.generator, text='Left team:')
         self.lbl_right_team = ctk.CTkLabel(self.generator, text='Right team:')
@@ -169,3 +173,9 @@ class App(ctk.CTk):
 
         self.ent_left_team.insert('end', ' '.join(teams['left']))
         self.ent_right_team.insert('end', ' '.join(teams['right']))
+
+    def clear_generator(self):
+        self.txt_choose_players.delete('0.0', 'end')
+        self.ent_right_team.delete('0', 'end')
+        self.ent_left_team.delete('0', 'end')
+        
