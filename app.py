@@ -26,7 +26,10 @@ class App(ctk.CTk):
 
         self.players_manager.rowconfigure((0, 1, 2), weight=1)
         self.players_manager.columnconfigure((0, 1, 2), weight=1)
-        # self.players_manager.columnconfigure(1, weight=2)
+        
+        self.generator.rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.generator.columnconfigure(0, weight=1)
+        self.generator.columnconfigure(1, weight=2)
 
         # players manager label
         self.lbl_players_manager = ctk.CTkLabel(self.players_manager, text='PLAYERS MANAGER')
@@ -46,11 +49,23 @@ class App(ctk.CTk):
         self.lbl_remove_players = ctk.CTkLabel(self.players_manager, text='Chose players to remove:')
         self.lbl_remove_players.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
-        self.remove_players_combobox = self.create_choose_players_combobox()
+        self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, self.insert_players_to_remove)
         self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
         self.btn_remove_players = ctk.CTkButton(self.players_manager, width=60, text='remove', command=self.remove_players)
         self.btn_remove_players.grid(row=2, column=2, padx=10, pady=5, sticky='w')
+
+        # team generator label
+        self.lbl_generate_teams = ctk.CTkLabel(self.generator, text='TEAM GENERATOR')
+        self.lbl_generate_teams.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+
+        # choose players to make teams out of
+        self.choose_players_combobox = self.create_choose_players_combobox(self.generator, self.insert_players_to_generator)
+        self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+
+        self.txt_choose_players = ctk.CTkTextbox(self.generator, height=50, width=350)
+        self.txt_choose_players.grid(row=1, column=1, padx=10, pady=10, sticky='ew')
+
 
     def add_player(self):
         new_players = self.ent_players.get().split()
@@ -63,8 +78,7 @@ class App(ctk.CTk):
                 else:
                     messagebox.showinfo('Already Saved', f'Player: {player.lower()} already saved.')
 
-        self.choose_players.destroy()
-        self.create_choose_players_combobox()
+        self.update_comboboxes()
         self.ent_players.delete('0', 'end')
 
     def load_players(self):
@@ -75,16 +89,18 @@ class App(ctk.CTk):
             return []
         return [player[:-1] for player in players]
     
-    def create_choose_players_combobox(self):
+    def create_choose_players_combobox(self, frame, command=None):
         if players := self.load_players():
-            self.choose_players = ctk.CTkComboBox(self.players_manager, values=players, command=self.insert_players)
+            self.choose_players = ctk.CTkComboBox(frame, values=players, command=command)
         else:
-            self.choose_players = ctk.CTkComboBox(self.players_manager, values=['no players'], state='readonly')
+            self.choose_players = ctk.CTkComboBox(frame, values=['no players'], state='readonly')
             self.choose_players.set('no players')
         return self.choose_players
     
-    def insert_players(self, player):
-        self.ent_players.insert('end', player + ' ')
+    def insert_players_to_remove(self, player):
+        chosen_players = self.ent_players.get()
+        if player not in chosen_players:
+            self.ent_players.insert('end', player + ' ')
 
     def remove_players(self):
         players = self.load_players()
@@ -98,7 +114,20 @@ class App(ctk.CTk):
             for player in players:
                 file.write(player.lower() + '\n')
 
-        self.choose_players.destroy()
-        self.create_choose_players_combobox()
+        self.update_comboboxes()
         self.ent_players.delete('0', 'end')
-        
+        self.txt_choose_players.delete('0.0', 'end')
+
+    def update_comboboxes(self):
+        self.remove_players_combobox.destroy()
+        self.remove_players_combobox = self.create_choose_players_combobox(self.players_manager, command=self.insert_players_to_remove)
+        self.remove_players_combobox.grid(row=2, column=1, padx=5, pady=5, sticky='w')
+
+        self.choose_players_combobox.destroy()
+        self.choose_players_combobox = self.create_choose_players_combobox(self.generator, self.insert_players_to_generator)
+        self.choose_players_combobox.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+
+    def insert_players_to_generator(self, player):
+        chosen_players = self.txt_choose_players.get('0.0', 'end')
+        if player not in chosen_players:
+            self.txt_choose_players.insert('end', player + ' ')
