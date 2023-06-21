@@ -50,23 +50,25 @@ class App(ctk.CTk):
     def add_player(self):
         new_players = self.ent_new_players.get().split()
 
-        with open('players.txt', 'a') as file:
+        with open('players.txt', 'a+') as file:
+            players = self.load_players()
             for player in new_players:
-                file.write(player + '\n')
+                if player not in players:
+                    file.write(player + '\n')
+                else:
+                    messagebox.showinfo('Already Saved', f'Player: {player} already saved.')
 
         self.chose_players.destroy()
         self.create_remove_players_combobox()
         self.ent_new_players.delete('0', 'end')
-        messagebox.showinfo('Succes', 'Players succesfully saved!')
 
     def load_players(self):
         try:
             with open('players.txt', 'r') as file:
                 players = file.readlines()
-                print(players)
         except FileNotFoundError:
             return []
-        return players
+        return [player[:-1] for player in players]
     
     def create_remove_players_combobox(self):
         if players := self.load_players():
